@@ -16,6 +16,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
     api := r.Group("/api/v1")
     {
         api.POST("/create", taskController.CreateNewTask)
+        api.DELETE("/delete/:id", taskController.EliminateTask)
+        api.PUT("/update/:id", taskController.UpdateTask)
     }
 
     return r
