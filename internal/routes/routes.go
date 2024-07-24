@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"github.com/EmiliodDev/GinTasker/internal/controllers"
+	"github.com/EmiliodDev/GinTasker/internal/services"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -8,5 +10,13 @@ import (
 func SetupRouter(db *gorm.DB) *gin.Engine {
     r := gin.Default()
 
-    userService := 
+    taskService := services.NewTaskService(db)
+    taskController := controllers.NewTaskController(taskService)
+
+    api := r.Group("/api/v1")
+    {
+        api.POST("/create", taskController.CreateNewTask)
+    }
+
+    return r
 }
