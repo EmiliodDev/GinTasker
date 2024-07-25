@@ -36,3 +36,21 @@ func (s *TaskService) DeleteTask(taskID uint) error {
 func (s *TaskService) UpdateTask(task *models.Task, taskID uint) error {
     return s.db.Save(&models.Task{ID: taskID, Name: task.Name, Description: task.Description, Completed: task.Completed}).Error
 }
+
+func (s *TaskService) GetTaskByID(taskID uint) (*models.Task, error) {
+    var task models.Task
+    if err := s.db.First(&task, taskID).Error; err != nil {
+        return nil, err
+    } 
+
+    return &task, nil
+}
+
+func (s *TaskService) GetAllTasks() ([]models.Task, error){
+    var tasklist []models.Task
+    if err := s.db.Find(&tasklist).Error; err != nil {
+        return nil, err;
+    }
+
+    return tasklist, nil
+}

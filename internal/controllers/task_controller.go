@@ -73,3 +73,29 @@ func (ctrl *TaskController) UpdateTask(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"message": "task successfully updated"})
 }
+
+func (ctrl *TaskController) GetTaskByID(c *gin.Context) {
+    taskID, err := strconv.ParseUint(c.Param("id"), 10, 32)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+        return
+    }
+
+    r, err := ctrl.service.GetTaskByID(uint(taskID))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, r)
+}
+
+func (ctrl *TaskController) GetAllTasks(c *gin.Context) {
+    r, err := ctrl.service.GetAllTasks()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, r)
+}
